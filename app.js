@@ -1,34 +1,50 @@
-const express=require( 'express' );
-const mongoose=require( 'mongoose' );
+const express=require( 'express' )
+const mongoose=require( 'mongoose' )
+
+const indexRoute=require( './Router/index' )
 const session=require( 'express-session' );
 const MongoStore=require( 'connect-mongo' );
 const fs=require( 'fs' );
 const crypto=require( 'crypto' );
 const cors=require( 'cors' );
-require( 'dotenv' ).config();
 
-const indexRoute=require( './Router/index' );
+
+require( 'dotenv' ).config();
 
 const app=express();
 app.use( express.json() );
-
 const corsOptions={
     origin: 'https://admirable-puppy-810ad2.netlify.app',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 };
 
 app.use( cors( corsOptions ) );
 
+// Additional CORS configurations as needed
 
-// Example endpoint
 
 
-// Handle OPTIONS requests (preflight)
-app.options( '*', cors( corsOptions ) );
+// Read existing contents of .env file
+let envContents='';
+try {
+    envContents=fs.readFileSync( '.env', 'utf8' );
+} catch ( err ) {
+    // File might not exist yet, which is okay
+}
+// Check if SESSION_SECRET_KEY already exists
+if ( !envContents.includes( 'SESSION_SECRET_KEY' ) ) {
+    // Generate a random secret
+    const secret=crypto.randomBytes( 64 ).toString( 'hex' );
+    // Append the new secret to the existing contents
+    envContents+=`\nSESSION_SECRET_KEY=${ secret }\n`;
+    // Write the updated contents back to the .env file
+    fs.writeFileSync( '.env', envContents );
+    console.log( 'Secret generated and appended to .env file.' );
+} else {
+    console.log( 'SESSION_SECRET_KEY already exists in .env file. Skipping generation.' );
+}
 
-// Session middleware
+
 app.use( session( {
     secret: process.env.SESSION_SECRET_KEY,
     saveUninitialized: false,
@@ -49,27 +65,35 @@ app.use( session( {
     }
 } ) );
 
-// MongoDB connection
+
 mongoose.set( 'strictQuery', false );
 const mongoDbURL=process.env.MONGO_URI;
-
+main().catch( err => {
+    console.log( err )
+} )
 async function main() {
-    try {
-        await mongoose.connect( mongoDbURL );
-        console.log( 'Connection successfully opened to MongoDB' );
-    } catch ( err ) {
-        console.error( 'MongoDB connection error:', err );
-    }
+    await mongoose.connect( mongoDbURL )
 }
+//app.use( '/reg', router )
+const mongoDb=mongoose.connection;
+mongoDb.on( 'error', err => {
+    console.log( err )
+} )
+mongoDb.once( 'open', () => {
+    console.log( 'Connection successfullly opened to MongoDb NoSQL' )
+} )
+// mongoDb.createCollection( 'UserDetails' )
+// app.use( '/reg', router )
+// app.use( '/user', router )
+// app.use( '/friend', friendRouter )
+// app.use( '/msg', postRouter )
+// app.use( '/heart', likeRouter )
 
-main();
+app.use( '/api', indexRoute )
 
-// Routes
-app.use( '/api', indexRoute );
-
-const PORT=process.env.PORT||3000;
+const PORT=process.env.PORT;
 app.listen( PORT, () => {
-    console.log( `Server is listening on port ${ PORT }` );
-} );
+    console.log( `Server is listening on the port${ PORT }` )
+} )
 
 module.exports=app;
