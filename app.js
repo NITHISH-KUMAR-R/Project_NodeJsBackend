@@ -14,7 +14,7 @@ require( 'dotenv' ).config();
 const app=express();
 app.use( express.json() );
 const corsOptions={
-    origin: 'http://localhost:3000',
+    origin: 'https://mini-x-server-bongfynfj-web-builders-projects-b1137b3d.vercel.app/',
     credentials: true
 };
 
@@ -51,15 +51,20 @@ app.use( session( {
     resave: false,
     store: MongoStore.create( {
         mongoUrl: process.env.MONGO_URI,
-        dbName: 'project-session-db'
+        dbName: 'project-session-db',
+        autoRemove: 'native' // Enable automatic removal of expired sessions
     } ),
     cookie: {
-        // maxAge: 5*60*1000, // 5 minutes in milliseconds
-        httpOnly: true, // Recommended to prevent client-side JS from accessing the cookie
-        secure: process.env.NODE_ENV==='production', // Recommended to ensure cookies are sent over HTTPS
-        //     sameSite: 'strict' // Recommended to mitigate CSRF attacks
+        httpOnly: true,
+        secure: process.env.NODE_ENV==='production',
+        sameSite: 'none'
+    }
+}, ( err ) => {
+    if ( err ) {
+        console.error( 'Session store error:', err );
     }
 } ) );
+
 
 mongoose.set( 'strictQuery', false );
 const mongoDbURL=process.env.MONGO_URI;
