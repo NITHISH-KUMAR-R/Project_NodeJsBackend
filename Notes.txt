@@ -1,0 +1,18 @@
+{
+  "name": "nithish",
+  "password": "nithish@45",
+  "email": "nithish@gmail.com"
+}
+
+
+{"name":"Dinesh",
+"password":"dinesh@45",
+"email":"dinesh@gmail.com"
+}
+
+
+PORT=3000
+SESSION_SECRET_KEY=ThisiSessinSeretkey
+MONGO_URI =mongodb+srv://nithishlearn45:LAuM7d5flTJSt5iF@cluster0.xz6mtmu.mongodb.net/project-node-server?retryWrites=true&w=majority&appName=Cluster0
+
+SESSION_SECRET_KEY=e92e02f927a4def4e0aa460546d87cf6f110e00354e64bde58d9d80679c48cb793790a8598a1e810c6a433aa859fe9fb3e211a8d3be20212bb9c216d07516e03
