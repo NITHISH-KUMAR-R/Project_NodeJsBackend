@@ -13,13 +13,20 @@ const app=express();
 app.use( express.json() );
 
 const corsOptions={
-    origin: ['https://mini-x-server-bongfynfj-web-builders-projects-b1137b3d.vercel.app', 'https://another-allowed-origin.com'],
+    origin: ['https://react-client-front-end100-mini-x-server.vercel.app/',],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use( cors( corsOptions ) );
+
+
+// Example endpoint
+
+
+// Handle OPTIONS requests (preflight)
+app.options( '*', cors( corsOptions ) );
 
 // Session middleware
 app.use( session( {
