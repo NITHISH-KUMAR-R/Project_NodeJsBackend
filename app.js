@@ -13,7 +13,7 @@ const app=express();
 app.use( express.json() );
 
 const corsOptions={
-    origin: ['https://react-client-front-end100-mini-x-server.vercel.app',],
+    origin: 'https://admirable-puppy-810ad2.netlify.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
