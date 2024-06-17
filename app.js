@@ -13,24 +13,12 @@ require( 'dotenv' ).config();
 
 const app=express();
 app.use( express.json() );
-const allowedOrigins=[
-    'https://mini-x-server.vercel.app',
-    'https://mini-x-server-bongfynfj-web-builders-projects-b1137b3d.vercel.app'
-];
-
 const corsOptions={
-    origin: ( origin, callback ) => {
-        if ( allowedOrigins.includes( origin ) ) {
-            callback( null, true );
-        } else {
-            callback( new Error( 'Not allowed by CORS' ) );
-        }
-    },
+    origin: 'https://mini-x-server-bongfynfj-web-builders-projects-b1137b3d.vercel.app',
     credentials: true
 };
 
 app.use( cors( corsOptions ) );
-
 
 // Additional CORS configurations as needed
 
