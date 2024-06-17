@@ -13,9 +13,16 @@ require( 'dotenv' ).config();
 
 const app=express();
 app.use( express.json() );
+// const corsOptions={
+//     origin: 'https://admirable-puppy-810ad2.netlify.app',
+//     credentials: true
+// };
+
 const corsOptions={
-    origin: 'https://admirable-puppy-810ad2.netlify.app',
-    credentials: true
+    origin: ['https://reactapp-minifront.netlify.app', 'https://admirable-puppy-810ad2.netlify.app'],
+    methods: ['GET', 'POST'], // Allow specific HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
+    credentials: true, // If your frontend sends cookies or uses HTTP authentication headers
 };
 
 app.use( cors( corsOptions ) );
